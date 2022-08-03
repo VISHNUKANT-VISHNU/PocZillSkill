@@ -1,0 +1,1561 @@
+{
+  "swagger": "2.0",
+  "host": "localhost:3033",
+  "basePath": "/v1",
+  "info": {
+    "description": "This is a BillBook Application API Documentation",
+    "version": "1.0.0",
+    "title": "Billbook Application API"
+  },
+  "tags": [
+    {
+      "name": "Admin",
+      "description": "Secured Admin-only calls"
+    },
+    {
+      "name": "Customers"
+    },
+    {
+      "name": "Daybook"
+    },
+    {
+      "name": "Expenses"
+    },
+    {
+      "name": "Invoices"
+    },
+    {
+      "name": "Logger"
+    },
+    {
+      "name": "Measurement"
+    },
+    {
+      "name": "OTP"
+    },
+    {
+      "name": "OTPless"
+    },
+    {
+      "name": "Reference Version"
+    },
+    {
+      "name": "Users"
+    },
+    {
+      "name": "Miscellaneous"
+    }
+  ],
+  "schemes": ["http", "https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/getOTP": {
+      "post": {
+        "tags": ["OTP"],
+        "summary": "sends OTP",
+        "operationId": "getOTP",
+        "description": "Send OTP",
+        "responses": {
+          "200": {
+            "description": "OTP sent",
+            "schema": {
+              "$ref": "#/definitions/res"
+            }
+          },
+          "400": {
+            "description": "Invalid Request"
+          }
+        },
+        "parameters": [{
+          "name": "Mobile No",
+          "in": "body",
+          "schema": {
+            "type": "object",
+            "required": ["mobileNo"],
+            "properties": {
+              "mobileNo": {
+                "type": "string",
+                "example": "9999999999"
+              },
+              "isUpdateMobileNo": {
+                "type": "string",
+                "example": "false"
+              }
+            }
+          }
+        }]
+      }
+    },
+    "/verifyOTP": {
+      "post": {
+        "tags": ["OTP"],
+        "summary": "verify OTP",
+        "operationId": "getOTP",
+        "description": "Verify OTP sent within 10 minutes",
+        "responses": {
+          "200": {
+            "description": "OTP verified",
+            "schema": {
+              "$ref": "#/definitions/res"
+            }
+          },
+          "400": {
+            "description": "Failed to verify"
+          }
+        },
+        "parameters": [{
+          "name": "Verify OTP",
+          "in": "body",
+          "schema": {
+            "type": "object",
+            "required": ["mobileNo", "otp"],
+            "properties": {
+              "mobileNo": {
+                "type": "string",
+                "example": "9999999999"
+              },
+              "otp": {
+                "type": "string",
+                "example": "123456"
+              }
+            }
+          },
+          "description": "To Verify OTP"
+        }]
+      }
+    },
+    "/users": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Create New User",
+        "operationId": "createUser",
+        "description": "Create a new user in Database",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Successfully created"
+          },
+          "400": {
+            "description": "Duplicate entry '9999999999' for key 'mobileNo', <br /> Failed to verify OTP"
+          }
+        },
+        "parameters": [{
+          "name": "Create new user",
+          "in": "body",
+          "description": "To create new user",
+          "schema": {
+            "type": "object",
+            "required": ["shopName", "mobileNo", "otp", "shopAddr", "pincode"],
+            "properties": {
+              "shopName": {
+                "type": "string",
+                "example": "Shope ABC"
+              },
+              "shopAddr": {
+                "type": "string",
+                "example": "Street 69"
+              },
+              "mobileNo": {
+                "type": "string",
+                "example": "9999999999"
+              },
+              "state": {
+                "type": "string",
+                "example": "Goa"
+              },
+              "city": {
+                "type": "string",
+                "example": "South Goa"
+              },
+              "pincode": {
+                "type": "string",
+                "example": "403801"
+              },
+              "otp": {
+                "type": "string",
+                "example": "123456"
+              }
+            }
+          }
+
+        }]
+      }
+    },
+    "/users/{id}": {
+      "put": {
+        "tags": ["Users"],
+        "summary": "Update existing User",
+        "operationId": "updateUser",
+        "consumes": ["multipart/form-data"],
+        "description": "Update a existing user in Database",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Successfully updated"
+          },
+          "400": {
+            "description": "Failed to update"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "integer",
+            "description": "Numeric ID of the user"
+          },
+          {
+            "in": "formData",
+            "name": "isProfileImage",
+            "type": "integer",
+            "description": "Set 1 to update profile image"
+          },
+          {
+            "in": "formData",
+            "name": "isSignatureImage",
+            "type": "integer",
+            "description": "Set 1 to update signature image"
+          },
+          {
+            "in": "formData",
+            "name": "isCompanyLogo",
+            "type": "integer",
+            "description": "Set 1 to update company logo"
+          },
+          {
+            "in": "formData",
+            "name": "companyLogo",
+            "type": "file",
+            "description": "Set company logo"
+          },
+          {
+            "in": "formData",
+            "name": "signatureImage",
+            "type": "file",
+            "description": "Set signature image"
+          },
+          {
+            "in": "formData",
+            "name": "profileImage",
+            "type": "file",
+            "description": "Set profile image"
+          },
+          {
+            "in": "formData",
+            "name": "shopName",
+            "type": "string",
+            "description": "Set shop name"
+          },
+          {
+            "in": "formData",
+            "name": "shopAddr",
+            "type": "string",
+            "description": "Set shop address"
+          },
+          {
+            "in": "formData",
+            "name": "mobileNo",
+            "type": "string",
+            "description": "Set mobile number"
+          },
+          {
+            "in": "formData",
+            "name": "pincode",
+            "type": "string",
+            "description": "Set pincode"
+          },
+          {
+            "in": "formData",
+            "name": "state",
+            "type": "string",
+            "description": "Set state"
+          },
+          {
+            "in": "formData",
+            "name": "city",
+            "type": "string",
+            "description": "Set city"
+          },
+          {
+            "in": "formData",
+            "name": "gstNumber",
+            "type": "string",
+            "description": "Set GST number"
+          },
+          {
+            "in": "formData",
+            "name": "isGST",
+            "type": "string",
+            "description": "1 for GST user, -1 for default, 0 for non-GST user"
+          },
+          {
+            "in": "formData",
+            "name": "email",
+            "type": "string",
+            "description": "Set email"
+          },
+          {
+            "in": "formData",
+            "name": "fullname",
+            "type": "string",
+            "description": "Set full name"
+          },
+          {
+            "in": "formData",
+            "name": "additionalData",
+            "type": "string",
+            "description": "bank details"
+          },
+          {
+            "in": "formData",
+            "name": "is_active",
+            "type": "integer",
+            "description": "0 to delete user, 1 for active user"
+          }
+        ]
+      }
+    },
+    "/invoice": {
+      "post": {
+        "tags": ["Invoices"],
+        "summary": "Create new invoice",
+        "operationId": "createInvoice",
+        "description": "Create a new invoice in Database",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Successfully created"
+          },
+          "400": {
+            "description": "Failed to create invoice"
+          }
+        },
+        "parameters": [{
+          "name": "Invoice",
+          "in": "body",
+          "schema": {
+            "type": "object",
+            "required": ["userid", "totalAmount", "invoiceDate", "totalAmountBeforeGST"],
+            "properties": {
+              "userid": {
+                "type": "integer",
+                "example": 170030
+              },
+              "gstBillNo": {
+                "type": "integer",
+                "example": 0
+              },
+              "nonGstBillNo": {
+                "type": "integer",
+                "example": 1
+              },
+              "customerName": {
+                "type": "string",
+                "example": "J. K. Rowling"
+              },
+              "customerMobileNo": {
+                "type": "string",
+                "example": "9999999999"
+              },
+              "customerAddress": {
+                "type": "string",
+                "example": "42, XYZ street, Near: JK Mansion"
+              },
+              "GSTNo": {
+                "type": "string",
+                "example": "19D585868681ZJ"
+              },
+              "discount": {
+                "type": "integer",
+                "example": 15
+              },
+              "totalAmount": {
+                "type": "integer",
+                "example": 100
+              },
+              "invoiceDate": {
+                "type": "string",
+                "example": "22 Oct 2020"
+              },
+              "totalAmountBeforeGST": {
+                "type": "integer",
+                "example": 100
+              },
+              "gstType": {
+                "type": "string",
+                "example": ""
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["gstAmount", "name", "quantity", "measurementId", "totalAmount", "userid"],
+                  "properties": {
+                    "gst": {
+                      "type": "integer",
+                      "example": 0
+                    },
+                    "gstAmount": {
+                      "type": "integer",
+                      "example": 100
+                    },
+                    "gstType": {
+                      "type": "string",
+                      "example": "CGST\/SGST (Local customer)"
+                    },
+                    "imei": {
+                      "type": "string",
+                      "example": "ABCD12354XYZ"
+                    },
+                    "is_active": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "measurementId": {
+                      "type": "integer",
+                      "example": 5
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Chocolate"
+                    },
+                    "price": {
+                      "type": "integer",
+                      "example": 50
+                    },
+                    "quantity": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "serial_no": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "totalAmount": {
+                      "type": "integer",
+                      "example": 100
+                    },
+                    "userid": {
+                      "type": "integer",
+                      "example": 170030
+                    }
+                  }
+                }
+
+              }
+            }
+          }
+
+        }]
+      }
+    },
+    "/updateInvoice/{id}": {
+      "put": {
+        "tags": ["Invoices"],
+        "summary": "Update existing Invoice",
+        "operationId": "updateInvoice",
+        "description": "Update a existing user in Database",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Successfully updated"
+          },
+          "400": {
+            "description": "Failed to update"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "integer",
+            "description": "Numeric ID of the invoice"
+          },{
+            "name": "Update invoice",
+            "in": "body",
+            "description": "To update invoice",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "gstBillNo": {
+                  "type": "integer",
+                  "example": 0
+                },
+                "nonGstBillNo": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "customerName": {
+                  "type": "string",
+                  "example": "J. K. Rowling"
+                },
+                "customerMobileNo": {
+                  "type": "string",
+                  "example": "9999999999"
+                },
+                "customerAddress": {
+                  "type": "string",
+                  "example": "42, XYZ street, Near: JK Mansion"
+                },
+                "GSTNo": {
+                  "type": "string",
+                  "example": "19D585868681ZJ"
+                },
+                "discount": {
+                  "type": "integer",
+                  "example": 15
+                },
+                "totalAmount": {
+                  "type": "integer",
+                  "example": 100
+                },
+                "invoiceDate": {
+                  "type": "string",
+                  "example": "22 Oct 2020"
+                },
+                "totalAmountBeforeGST": {
+                  "type": "integer",
+                  "example": 100
+                },
+                "gstType": {
+                  "type": "string",
+                  "example": ""
+                },
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "gst": {
+                        "type": "integer",
+                        "example": 0
+                      },
+                      "gstAmount": {
+                        "type": "integer",
+                        "example": 100
+                      },
+                      "gstType": {
+                        "type": "string",
+                        "example": "CGST\/SGST (Local customer)"
+                      },
+                      "imei": {
+                        "type": "string",
+                        "example": "ABCD12354XYZ"
+                      },
+                      "is_active": {
+                        "type": "boolean",
+                        "example": true
+                      },
+                      "measurementId": {
+                        "type": "integer",
+                        "example": 5
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Chocolate"
+                      },
+                      "price": {
+                        "type": "integer",
+                        "example": 50
+                      },
+                      "quantity": {
+                        "type": "integer",
+                        "example": 2
+                      },
+                      "serial_no": {
+                        "type": "string",
+                        "example": ""
+                      },
+                      "totalAmount": {
+                        "type": "integer",
+                        "example": 100
+                      }
+                    }
+                  }
+  
+                }
+              }
+            }
+  
+          }
+        ]
+      }
+    },
+    "/getLastInvoiceNumber": {
+      "post": {
+        "tags": ["Invoices"],
+        "summary": "Get last invoice number",
+        "operationId": "getLastInvoiceNumber",
+        "description": "Last GST and Non-GST Bill-Number",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Failed"
+          }
+        },
+        "parameters": [
+          {
+            "name": "Last gst and no-gst bill no.",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "required": ["userid"],
+              "properties": {
+                "userid": {
+                  "type": "integer",
+                  "example": 170030
+                }
+              }
+            }
+  
+          }
+        ]
+      }
+    },
+    "/getInvoiceUrl/{invoiceid}": {
+      "get": {
+        "tags": ["Invoices"],
+        "summary": "URL of invoice pdf",
+        "operationId": "getInvoiceUrl",
+        "description": "get the pdfLink of invoice",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "pdfLink"
+          },
+          "400": {
+            "description": "Failed"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "invoiceid",
+            "type": "integer",
+            "description": "Numeric ID of the invoice"
+          }
+        ]
+      }
+    },
+    "/searchInvoice": {
+      "post": {
+        "tags": ["Invoices"],
+        "summary": "Search invoices",
+        "operationId": "searchInvoice",
+        "description": "Search all invoices of a user or invoices matching by part-name or part-mobile-no",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Invoices"
+          },
+          "400": {
+            "description": "Failed"
+          }
+        },
+        "parameters": [
+          {
+            "name": "Request",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "required": ["userid", "page"],
+              "properties": {
+                "userid": {
+                  "type": "integer",
+                  "example": 170030
+                },
+                "page": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "customerMobileNo": {
+                  "type": "string",
+                  "example": "7001648",
+                  "description": "part mobile no. or name"
+                }
+              }
+            }
+  
+          }
+        ]
+      }
+    },
+    "/searchItems": {
+      "post": {
+        "tags": ["Invoices"],
+        "summary": "Search items by part-name",
+        "operationId": "searchItems",
+        "description": "Search items of a user by part-name",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Failed"
+          }
+        },
+        "parameters": [
+          {
+            "name": "Item Name",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "required": ["userid", "name"],
+              "properties": {
+                "userid": {
+                  "type": "integer",
+                  "example": 170030
+                },
+                "name": {
+                  "type": "string",
+                  "example": "paper"
+                }
+              }
+            }
+  
+          }
+        ]
+      }
+    },
+    "/expense": {
+      "post": {
+        "tags": ["Expenses"],
+        "summary": "Create new expense",
+        "operationId": "createExpense",
+        "description": "To create a new expense",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Expense created"
+          },
+          "400": {
+            "description": "Failed to create"
+          }
+        },
+        "parameters": [
+          {
+            "name": "Expense",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "required": ["userid", "name", "expenseDate", "amount"],
+              "properties": {
+                "userid": {
+                  "type": "integer",
+                  "example": 170030
+                },
+                "name": {
+                  "type": "string",
+                  "example": "A4 size papers"
+                },
+                "expenseDate": {
+                  "type": "string",
+                  "example": "2022-03-25"
+                },
+                "amount": {
+                  "type": "integer",
+                  "example": 180
+                }
+              }
+            }
+  
+          }
+        ]
+      }
+    },
+    "/expenseInBulk": {
+      "post": {
+        "tags": ["Expenses"],
+        "summary": "Create expenses in bulk",
+        "operationId": "expenseInBulk",
+        "description": "To create new expenses in bulk",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Expenses created"
+          },
+          "400": {
+            "description": "Failed to create"
+          }
+        },
+        "parameters": [
+          {
+            "name": "Expenses",
+            "in": "body",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["userid", "name", "expenseDate", "amount"],
+                "properties": {
+                  "userid": {
+                    "type": "integer",
+                    "example": 170030
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "A4 size papers"
+                  },
+                  "expenseDate": {
+                    "type": "string",
+                    "example": "2022-03-25"
+                  },
+                  "amount": {
+                    "type": "integer",
+                    "example": 180
+                  }
+                }
+              }
+            }
+  
+          }
+        ]
+      }
+    },
+    "/expense/{id}": {
+      "put": {
+        "tags": ["Expenses"],
+        "summary": "Update expense",
+        "operationId": "updateExpense",
+        "description": "To update an expense",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Expense updated"
+          },
+          "400": {
+            "description": "Failed to update"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "integer",
+            "description": "Numeric ID of the expense"
+          },
+          {
+            "name": "Expense",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "required": ["userid"],
+              "properties": {
+                "userid": {
+                  "type": "integer",
+                  "example": 170030
+                },
+                "name": {
+                  "type": "string",
+                  "example": "A4 size papers"
+                },
+                "expenseDate": {
+                  "type": "string",
+                  "example": "2022-03-25"
+                },
+                "amount": {
+                  "type": "integer",
+                  "example": 180
+                }
+              }
+            }
+  
+          }
+        ]
+      }
+    },
+    "/expense/{userid}": {
+      "get": {
+        "tags": ["Expenses"],
+        "summary": "Get expenses",
+        "operationId": "expenseInBulk",
+        "description": "Get all expenses of a user",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Expenses created"
+          },
+          "400": {
+            "description": "Failed to create"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userid",
+            "type": "integer",
+            "description": "Numeric ID of the user"
+          }
+        ]
+      }
+    },
+    "/measurements": {
+      "get": {
+        "tags": ["Measurement"],
+        "summary": "Get all measurements",
+        "operationId": "measurements",
+        "description": "Get all measurement units",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Failed"
+          }
+        }
+      }
+    },
+    "/searchMeasurementId": {
+      "post": {
+        "tags": ["Measurement"],
+        "summary": "Search measurement unit of an item",
+        "operationId": "searchMeasurementId",
+        "description": "Search measurement unit of an item by its name",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Failed"
+          }
+        },
+        "parameters": [
+          {
+            "name": "Item Name",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "required": ["userid", "name"],
+              "properties": {
+                "userid": {
+                  "type": "integer",
+                  "example": 170030
+                },
+                "name": {
+                  "type": "string",
+                  "example": "A4 size papers"
+                }
+              }
+            }
+  
+          }
+        ]
+      }
+    },
+    "/daybook/{userid}": {
+      "put": {
+        "tags": ["Daybook"],
+        "summary": "View daybook",
+        "operationId": "getDaybook",
+        "description": "To get the daybook",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Failed"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userid",
+            "type": "integer",
+            "description": "Numeric ID of the user"
+          },
+          {
+            "name": "Date range",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "required": ["startDate", "endDate"],
+              "properties": {
+                "startDate": {
+                  "type": "string",
+                  "example": "2022-03-20T18:30:00.000Z"
+                },
+                "endDate": {
+                  "type": "string",
+                  "example": "2022-03-27T18:30:00.000Z"
+                }
+              }
+            }
+  
+          }
+        ]
+      }
+    },
+    "/exportDayBook/{userid}": {
+      "put": {
+        "tags": ["Daybook"],
+        "summary": "Export daybook in excel",
+        "operationId": "exportDayBook",
+        "description": "To export daybook in excel format",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Download Link"
+          },
+          "400": {
+            "description": "Failed to export"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userid",
+            "type": "integer",
+            "description": "Numeric ID of the user"
+          },
+          {
+            "name": "Date range",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "required": ["startDate", "endDate"],
+              "properties": {
+                "startDate": {
+                  "type": "string",
+                  "example": "2022-03-20T18:30:00.000Z"
+                },
+                "endDate": {
+                  "type": "string",
+                  "example": "2022-03-27T18:30:00.000Z"
+                }
+              }
+            }
+  
+          }
+        ]
+      }
+    },
+    "/loggerAPI": {
+      "post": {
+        "tags": ["Logger"],
+        "summary": "Logger API for frontend error",
+        "operationId": "loggerAPI",
+        "description": "To log frontend errors in backend",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Failed"
+          }
+        },
+        "parameters": [
+          {
+            "name": "Frontend Payload",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "required": ["nameValuePairs"],
+              "properties": {
+                "nameValuePairs": {
+                  "type": "object",
+                  "required": ["api", "frontendPayload", "frontendError"],
+                  "properties": {
+                    "api": {
+                      "type": "string",
+                      "example": "/v1/getOTP"
+                    },
+                    "frontendPayload": {
+                      "type": "object"
+                    },
+                    "frontendError": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+  
+          }
+        ]
+      }
+    },
+    "/getPincode": {
+      "post": {
+        "tags": ["Miscellaneous"],
+        "summary": "Get Location by Pincode",
+        "operationId": "getPincode",
+        "description": "To get the city and state fields by pincode",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "City & State"
+          },
+          "400": {
+            "description": "Invalid Pincode"
+          }
+        },
+        "parameters": [
+          {
+            "name": "Pincode",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "required": ["pincode"],
+              "properties": {
+                "pincode": {
+                  "type": "string",
+                  "example": "713359"
+                }
+              }
+            }
+  
+          }
+        ]
+      }
+    },
+    "/getSignupUrl": {
+      "get": {
+        "tags": ["OTPless"],
+        "summary": "Get signup url for whatsapp",
+        "operationId": "getSignupUrl",
+        "description": "Get signup url for whatsapp",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "url"
+          },
+          "400": {
+            "description": "Failed"
+          }
+        }
+      }
+    },
+    "/getUserDetails": {
+      "post": {
+        "tags": ["OTPless"],
+        "summary": "Get user detais for whatsapp login",
+        "operationId": "getUserDetails",
+        "description": "Get user detais for whatsapp login",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "User details"
+          },
+          "400": {
+            "description": "Failed"
+          }
+        },
+        "parameters": [
+          {
+            "name": "Token",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "required": ["token"],
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "example": "12345ABCDExyz"
+                }
+              }
+            }
+  
+          }
+        ]
+      }
+    },
+    "/user/{userid}/{key}": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get user details by userid",
+        "operationId": "userDetails",
+        "description": "Get details of a user including shop name, mobileNo etc by userid",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "User details"
+          },
+          "400": {
+            "description": "Wrong key"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userid",
+            "type": "integer",
+            "description": "Numeric ID of the user"
+          },
+          {
+            "in": "path",
+            "name": "key",
+            "type": "string",
+            "description": "Secret export key"
+          }
+        ]
+      }
+    },
+    "/exportUser/{noMonth}/{key}": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Export user details",
+        "operationId": "exportUser",
+        "description": "Export all user details of a month in excel",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Download link"
+          },
+          "400": {
+            "description": "Wrong key"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "noMonth",
+            "type": "integer",
+            "description": "Month no. before the current month",
+            "example": 2
+          },
+          {
+            "in": "path",
+            "name": "key",
+            "type": "string",
+            "description": "Secret export key"
+          }
+        ]
+      }
+    },
+    "/exportExpenses/{noMonth}/{key}": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Export expense details",
+        "operationId": "exportExpenses",
+        "description": "Export all expense details of a month in excel",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Download link"
+          },
+          "400": {
+            "description": "Wrong key"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "noMonth",
+            "type": "integer",
+            "description": "Month no. before the current month",
+            "example": 2
+          },
+          {
+            "in": "path",
+            "name": "key",
+            "type": "string",
+            "description": "Secret export key"
+          }
+        ]
+      }
+    },
+    "/exportPassiveData/{noMonth}/{key}": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Export passive data details",
+        "operationId": "exportPassiveData",
+        "description": "Export all passive data details of a month in excel",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Download link"
+          },
+          "400": {
+            "description": "Wrong key"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "noMonth",
+            "type": "integer",
+            "description": "Month no. before the current month",
+            "example": 2
+          },
+          {
+            "in": "path",
+            "name": "key",
+            "type": "string",
+            "description": "Secret export key"
+          }
+        ]
+      }
+    },
+    "/exportInvoices/{key}": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Export invoice details",
+        "operationId": "exportInvoices",
+        "description": "Export all invoice details of a month in excel",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Download link"
+          },
+          "400": {
+            "description": "Wrong key"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "type": "string",
+            "description": "Secret export key"
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "type": "string",
+            "description": "Start date",
+            "example": "2022-03-22"
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "type": "string",
+            "description": "End date",
+            "example": "2022-03-25"
+          }
+        ]
+      }
+    },
+    "/refVersion": {
+      "get": {
+        "tags": ["Reference Version"],
+        "summary": "Refer app version",
+        "operationId": "refVersion",
+        "description": "Refer app version",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Failed"
+          }
+        }
+      }
+    },
+    "/findCustomer": {
+      "post": {
+        "tags": ["Customers"],
+        "summary": "Finds customer suggestions",
+        "operationId": "findCustomer",
+        "description": "Finds customer suggestions with part name",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/res"
+            }
+          },
+          "400": {
+            "description": "Invalid Request"
+          }
+        },
+        "parameters": [{
+          "name": "Payload",
+          "in": "body",
+          "schema": {
+            "type": "object",
+            "required": ["userid", "customerName"],
+            "properties": {
+              "userid": {
+                "type": "integer",
+                "example": 170030
+              },
+              "customerName": {
+                "type": "string",
+                "example": "ravi k"
+              }
+            }
+          }
+        }]
+      }
+    },
+    "/expense/{expenseId}": {
+      "delete": {
+        "tags": ["Expenses"],
+        "summary": "Delete expense by ID",
+        "operationId": "deleteExpenseById",
+        "description": "Deletes an expense by its ID",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/res"
+            }
+          },
+          "400": {
+            "description": "Something Went Wrong"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "expenseId",
+            "type": "integer",
+            "description": "Numeric ID of the expense"
+          }
+        ]
+      }
+    },
+    "/invoices/deleteInBulk": {
+      "post": {
+        "tags": ["Invoices"],
+        "summary": "Deletes invoices",
+        "operationId": "deleteInvoicesInBulk",
+        "description": "Delete invoices having id invoiceIDs",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/res"
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Failed"
+          }
+        },
+        "parameters": [
+          {
+            "name": "invoiceIDs",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "required": ["invoiceIDs"],
+              "properties": {
+                "invoiceIDs": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  },
+                  "example": [1, 2, 3]
+                }
+              }
+            }
+  
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "res": {
+      "type": "object",
+      "required": ["data", "err", "status"],
+      "properties": {
+        "data": {
+          "oneOf": [{
+              "type": "object"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "example": []
+        },
+        "status": {
+          "type": "boolean",
+          "example": true
+        },
+        "err": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "code": {
+              "type": "string"
+            }
+          },
+          "example": {}
+        }
+      }
+    },
+    "securitySchemes": {
+      "jwt": {
+        "description": "The following syntax of jwt token must be passed in below input box 'Bearer token_return_by_api_auth'",
+        "type": "apiKey",
+        "name": "x-auth-token",
+        "in": "header"
+      }
+    }
+  },
+  "security": [{
+    "jwt": []
+  }]
+}
